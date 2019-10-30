@@ -18,12 +18,12 @@ func Test_bind(t *testing.T) {
 	}
 
 	cases := map[string]test{
-		"non struct type should error": test{
+		"non struct type should error": {
 			binder: viper.New(),
 			src:    "foo",
 			err:    ErrInvalidType,
 		},
-		"nil nested struct": test{
+		"nil nested struct": {
 			binder: viper.New(),
 			src: struct {
 				Foo *struct {
@@ -36,7 +36,7 @@ func Test_bind(t *testing.T) {
 				t.Helper()
 			},
 		},
-		"binds from struct": test{
+		"binds from struct": {
 			binder: viper.New(),
 			src: struct {
 				Foo string `config:"foo"`
@@ -55,7 +55,7 @@ func Test_bind(t *testing.T) {
 				assert.Equal(t, "bar", v.GetString("foo"))
 			},
 		},
-		"binds from pointer to struct": test{
+		"binds from pointer to struct": {
 			binder: viper.New(),
 			src: &struct {
 				Foo string `config:"foo"`
@@ -74,7 +74,7 @@ func Test_bind(t *testing.T) {
 				assert.Equal(t, "bar", v.GetString("foo"))
 			},
 		},
-		"nested struct": test{
+		"nested struct": {
 			binder: viper.New(),
 			src: struct {
 				Foo string `config:"foo"`
@@ -101,7 +101,7 @@ func Test_bind(t *testing.T) {
 				assert.Equal(t, "baz", v.GetString("bar_baz"))
 			},
 		},
-		"nested pointer struct": test{
+		"nested pointer struct": {
 			binder: viper.New(),
 			src: struct {
 				Foo string `config:"foo"`
@@ -128,7 +128,7 @@ func Test_bind(t *testing.T) {
 				assert.Equal(t, "baz", v.GetString("bar_baz"))
 			},
 		},
-		"pointer pointer": test{
+		"pointer pointer": {
 			binder: viper.New(),
 			src: &struct {
 				Foo string `config:"foo"`
@@ -157,7 +157,7 @@ func Test_bind(t *testing.T) {
 				assert.Equal(t, "bar", v.GetString("foo"))
 			},
 		},
-		"deep nested": test{
+		"deep nested": {
 			binder: viper.New(),
 			src: &struct {
 				Foo string `config:"foo"`

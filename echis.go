@@ -15,6 +15,7 @@ const (
 	DefaultTagName   = "mapstructure"
 )
 
+// Error is a custom error returned by Bind to indicate the error
 type Error uint8
 
 func (e Error) Error() string {
@@ -28,29 +29,39 @@ func (e Error) Error() string {
 	}
 }
 
+// A Binder binds environment variables
 type Binder interface {
 	BindEnv(...string) error
 }
 
+// Options configures how binding occurs
 type Options struct {
 	Seperator string
 	TagName   string
 }
 
+// An Option function updates an Options instance
 type Option func(*Options)
 
+// WithTagName configues the seperator used to join Viper look up paths
 func WithSeperator(s string) Option {
 	return func(o *Options) {
 		o.Seperator = s
 	}
 }
 
+// WithTagName configures the struct tag name used to walk the data structure
 func WithTagName(n string) Option {
 	return func(o *Options) {
 		o.TagName = n
 	}
 }
 
+// Bind walks the given source to build viper lookup paths from struct tags, by
+// default it assumes the same struct tag as you would use for viper.Unmarshal
+// but you can set a different tag name if you need using the WithTagName option.
+// If you have also set Viper to use a different seperator from _ you can also set
+// that using the WithSeperator option.
 func Bind(binder Binder, src interface{}, opts ...Option) error {
 	o := &Options{
 		Seperator: DefaultSeperator,
